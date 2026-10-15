@@ -177,7 +177,20 @@ html.lenis body {
 .stage {
   --fs: min(9.4vw, 15svh);
   --strip: calc(var(--fs) * 1.5);
+  --band: 0px;
   --ph: min(64svh, 112vw);
+}
+/* phones + tablets: stacked layout with an info band above the name */
+@media (max-width: 1279.98px) {
+  .stage {
+    --fs: min(11.4vw, 15svh);
+    --band: 6.6rem;
+    --ph: clamp(220px, calc(100svh - var(--strip) - var(--band) - 13.5rem), 105vw);
+  }
+  .giant {
+    font-size: min(15vw, 12svh) !important;
+    line-height: 0.9;
+  }
 }
 .lens-layer {
   clip-path: circle(var(--r, 0px) at var(--x, 50%) var(--y, 50%));

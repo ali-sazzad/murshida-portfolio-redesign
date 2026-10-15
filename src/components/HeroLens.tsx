@@ -10,7 +10,7 @@ function Stage({ image, first, last, role, skills, lens }: Props & { lens?: bool
       <div
         className="absolute left-1/2 -translate-x-1/2 rounded-t-full"
         style={{
-          bottom: "var(--strip)",
+          bottom: "calc(var(--strip) + var(--band))",
           width: "calc(var(--ph) * 0.66)",
           height: "calc(var(--ph) * 0.9)",
           background: lens ? "var(--color-paper)" : "var(--color-accent)",
@@ -19,9 +19,9 @@ function Stage({ image, first, last, role, skills, lens }: Props & { lens?: bool
       {/* role */}
       <p
         className="display giant absolute inset-x-0 text-center text-ink"
-        style={{ top: "max(6.6rem, 14svh)", letterSpacing: "-0.03em" }}
+        style={{ top: "max(5.4rem, 12svh)", letterSpacing: "-0.03em" }}
       >
-        {role[0]} {role[1]}
+        <span className="block xl:inline">{role[0]}</span> <span className="block xl:inline">{role[1]}</span>
       </p>
       {/* portrait */}
       <img
@@ -29,7 +29,7 @@ function Stage({ image, first, last, role, skills, lens }: Props & { lens?: bool
         alt=""
         draggable={false}
         className="absolute left-1/2 -translate-x-1/2 select-none"
-        style={{ bottom: "var(--strip)", height: "var(--ph)", width: "auto", maxWidth: "none" }}
+        style={{ bottom: "calc(var(--strip) + var(--band))", height: "var(--ph)", width: "auto", maxWidth: "none" }}
       />
       {/* name strip */}
       <div
@@ -45,7 +45,10 @@ function Stage({ image, first, last, role, skills, lens }: Props & { lens?: bool
         </p>
       </div>
       {/* stack list */}
-      <ul className="mono absolute left-5 grid gap-1 md:left-10" style={{ bottom: "calc(var(--strip) + 1.25rem)" }}>
+      <ul
+        className="mono absolute left-5 grid grid-cols-1 gap-x-5 gap-y-1 text-[0.7rem] sm:grid-cols-2 sm:gap-y-1.5 md:left-10 xl:grid-cols-1 xl:text-[0.72rem]"
+        style={{ bottom: "calc(var(--strip) + 1.1rem)" }}
+      >
         {skills.map((s, i) => (
           <li key={s} className="flex items-center gap-2">
             <span className="opacity-50">0{i + 1}</span>
