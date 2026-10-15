@@ -36,10 +36,10 @@ export default function Cursor() {
   return (
     <>
       <div ref={ring} className={base} style={{ viewTransitionName: "cursor-ring" }}>
-        <div className="-ml-5 -mt-5 size-10 rounded-full border border-paper mix-blend-difference" />
+        <div className="-ml-5 -mt-5 size-10 rounded-full border-2 border-ink shadow-[0_0_0_1.5px_#fff,inset_0_0_0_1.5px_#fff]" />
       </div>
       <div ref={dot} className={base} style={{ viewTransitionName: "cursor-dot" }}>
-        <div className="-ml-[3px] -mt-[3px] size-[6px] rounded-full bg-paper mix-blend-difference" />
+        <div className="-ml-[4px] -mt-[4px] size-[8px] rounded-full border-[1.5px] border-white bg-ink" />
       </div>
     </>
   );

@@ -131,5 +131,5 @@ export const certificates = [
   "Introduction to Game Design",
   "Introduction to Software Engineering",
   "Critical Thinking in the AI Era",
-  "IEDC SUmmit 24",
+  "IEDC Summit 24",
 ];

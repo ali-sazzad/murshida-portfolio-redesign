@@ -1,28 +1,76 @@
 ---
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
-import { certificates } from "../data/content";
+import { certificates, intro } from "../data/content";
+
+// category is derived from the certificate title (no new facts added)
+const kind = (t: string) => {
+  const s = t.toLowerCase();
+  if (s.includes("internship")) return "Internship";
+  if (s.includes("workshop")) return "Workshop";
+  if (s.includes("program")) return "Program";
+  if (s.includes("summit")) return "Event";
+  return "Course";
+};
+const COLOR: Record<string, string> = {
+  Internship: "#ff5a36",
+  Workshop: "#3b82f6",
+  Program: "#10b981",
+  Event: "#a855f7",
+  Course: "#f5b700",
+};
+const skins = ["bg-paper text-ink", "bg-paper-2 text-ink", "bg-ink text-paper"];
+const items = certificates.map((title, i) => ({ title, i, cat: kind(title), skin: skins[i % 3], color: COLOR[kind(title)] }));
 ---
 
 <Base>
   <main>
     <PageHead index="06" title="Certificates" note={`${certificates.length} entries`} />
 
-    <section class="mt-16 px-5 md:mt-24 md:px-10">
-      <ol class="border-t border-ink/80">
+    <section class="mt-12 px-4 md:mt-20 md:px-10">
+      <p class="mono mb-6 flex items-center justify-between border-t border-ink/80 pt-4">
+        <span>The archive</span>
+        <span class="opacity-60">Scroll · each folder lands on the last</span>
+      </p>
+
+      <!-- folder stack: each certificate is a tabbed folder that pins and stacks -->
+      <ol class="stack">
         {
-          certificates.map((c, i) => (
-            <li class="border-b border-ink/80" data-reveal style={`--d:${Math.min(i, 5) * 0.04}s`}>
-              <div
-                class="row group flex items-center gap-5 py-5 transition-[padding] duration-700 ease-[var(--ease-expo)] hover:px-5 md:gap-10 md:py-7"
-                data-cursor
-              >
-                <span class="mono w-8 shrink-0 md:w-12">{String(i + 1).padStart(2, "0")}</span>
-                <span class="min-w-0 flex-1 text-[clamp(1.25rem,3.6vw,3.2rem)] leading-[1.05] font-bold tracking-tight">
-                  {c}
-                </span>
-                <span class="text-2xl transition-transform duration-500 group-hover:rotate-45 md:text-4xl">↗</span>
-              </div>
+          items.map((c) => (
+            <li class="folder" style={`--i:${c.i}`}>
+              <article class={`sheet ${c.skin}`} style={`--c:${c.color}`}>
+                <!-- index tab -->
+                <header class="tab">
+                  <span class="mono">No. {String(c.i + 1).padStart(2, "0")}</span>
+                  <span class="tab-title">{c.title}</span>
+                  <span class="mono chip">{c.cat}</span>
+                </header>
+
+                <!-- certificate body -->
+                <div class="body">
+                  <div class="cert">
+                    <span class="bignum" aria-hidden="true">{String(c.i + 1).padStart(2, "0")}</span>
+                    <span class="ribbon" aria-hidden="true">{c.cat}</span>
+                    <div class="cert-copy">
+                      <p class="mono opacity-70">Certificate</p>
+                      <h2 class="cert-title">{c.title}</h2>
+                      <p class="serif mt-4 opacity-80">awarded to</p>
+                      <p class="serif cert-name">{intro.name}</p>
+                    </div>
+                    <div class="seal" aria-hidden="true">
+                      <svg viewBox="0 0 100 100" class="seal-ring">
+                        <defs>
+                          <path id={`p${c.i}`} d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+                        </defs>
+                        <text fill="currentColor" style="font: 600 7.4px var(--font-mono); letter-spacing: .12em;">
+                          <textPath href={`#p${c.i}`}>{`${c.cat.toUpperCase()} • ${c.cat.toUpperCase()} • ${c.cat.toUpperCase()} • `}</textPath>
+                        </text>
+                      </svg>
+                      <span class="seal-core">{String(c.i + 1).padStart(2, "0")}</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </li>
           ))
         }
@@ -30,3 +78,181 @@ import { certificates } from "../data/content";
     </section>
   </main>
 </Base>
+
+<style>
+  .stack {
+    --top: 5.2rem;
+    --step: 3.1rem;
+    --off: 0.75rem;
+    --h: 21rem;
+    padding-bottom: 6rem;
+  }
+  .folder {
+    position: sticky;
+    top: calc(var(--top) + var(--i) * var(--off));
+    height: var(--h);
+    margin-bottom: 14vh;
+  }
+  .sheet {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1.5px solid #000;
+    border-radius: 1.4rem;
+    overflow: hidden;
+    box-shadow: 0 -14px 30px -18px rgba(0, 0, 0, 0.45);
+  }
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: var(--step);
+    flex: none;
+    padding: 0 1.1rem;
+    border-bottom: 1.5px solid currentColor;
+  }
+  .tab-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 1.02rem;
+  }
+  .chip {
+    flex: none;
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    padding: 0.15rem 0.7rem;
+    font-size: 0.62rem;
+  }
+  .body {
+    flex: 1;
+    min-height: 0;
+    padding: 1rem 1.1rem 1.2rem;
+  }
+  .cert {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      repeating-radial-gradient(circle at 78% 50%, transparent 0 7px, color-mix(in srgb, currentColor 9%, transparent) 7px 8px),
+      linear-gradient(115deg, color-mix(in srgb, var(--c) 16%, transparent), transparent 55%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    border: 1px solid currentColor;
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+    border-radius: 0.5rem;
+    padding: 1.1rem 1.4rem;
+    margin: 4px;
+  }
+  .cert-copy {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
+  .bignum {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(8rem, 24vw, 17rem);
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in srgb, currentColor 22%, transparent);
+    pointer-events: none;
+  }
+  .ribbon {
+    position: absolute;
+    top: 0;
+    left: 1.6rem;
+    padding: 0.45rem 0.8rem 0.9rem;
+    background: var(--c);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+    z-index: 2;
+  }
+  .cert-copy {
+    padding-top: 1.2rem;
+  }
+  .cert-title {
+    margin-top: 0.4rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-size: clamp(1.5rem, 4.4vw, 3.2rem);
+    text-wrap: balance;
+  }
+  .cert-name {
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    line-height: 1.1;
+    border-bottom: 1px solid currentColor;
+    display: inline-block;
+    padding-right: 1.5rem;
+  }
+  .seal {
+    position: relative;
+    flex: none;
+    width: clamp(4.6rem, 12vw, 8.5rem);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+  .seal-ring {
+    position: absolute;
+    inset: 0;
+    animation: spin 28s linear infinite;
+  }
+  .seal::before {
+    content: "";
+    position: absolute;
+    inset: 14%;
+    border-radius: 9999px;
+    background: var(--c);
+    opacity: 0.9;
+  }
+  .seal-core {
+    position: relative;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    display: grid;
+    place-items: center;
+    background: currentColor;
+    font-family: var(--font-mono);
+    font-size: clamp(0.75rem, 1.6vw, 1.1rem);
+    font-weight: 600;
+  }
+  .seal-core,
+  .sheet.bg-ink .seal-core {
+    background: #000;
+    color: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .stack { --top: 4.6rem; --step: 2.7rem; --off: 0.6rem; --h: 20rem; }
+    .cert { flex-direction: column-reverse; align-items: flex-start; justify-content: flex-end; gap: 0.8rem; }
+    .seal { width: 4.2rem; align-self: flex-end; }
+    .chip { display: none; }
+    .bignum { opacity: 0.7; font-size: 9rem; }
+    .tab { gap: 0.7rem; padding: 0 0.9rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seal-ring { animation: none; }
+  }
+</style>

@@ -116,7 +116,7 @@ export default function Chrome({ links, resume, email, phone, linkedin, github, 
         className="pointer-events-none fixed inset-x-0 top-5 z-40 hidden justify-center xl:top-7 xl:flex"
         style={{ viewTransitionName: "chrome-dock" }}
       >
-        <div className="pointer-events-auto relative flex rounded-full border border-ink/15 bg-paper/75 p-1.5 shadow-[0_18px_50px_-18px_rgba(18,16,14,0.45)] backdrop-blur-xl">
+        <div className="pointer-events-auto relative flex rounded-full border border-ink/15 bg-paper/75 p-1.5 shadow-[0_18px_50px_-18px_rgba(0,0,0,0.45)] backdrop-blur-xl">
           <span
             aria-hidden
             className={cn(
