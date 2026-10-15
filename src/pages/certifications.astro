@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { certificates } from "../data/content";
+---
+
+<Base>
+  <main>
+    <PageHead index="06" title="Certificates" note={`${certificates.length} entries`} />
+
+    <section class="mt-16 px-5 md:mt-24 md:px-10">
+      <ol class="border-t border-ink/80">
+        {
+          certificates.map((c, i) => (
+            <li class="border-b border-ink/80" data-reveal style={`--d:${Math.min(i, 5) * 0.04}s`}>
+              <div
+                class="row group flex items-center gap-5 py-5 transition-[padding] duration-700 ease-[var(--ease-expo)] hover:px-5 md:gap-10 md:py-7"
+                data-cursor
+              >
+                <span class="mono w-8 shrink-0 md:w-12">{String(i + 1).padStart(2, "0")}</span>
+                <span class="min-w-0 flex-1 text-[clamp(1.25rem,3.6vw,3.2rem)] leading-[1.05] font-bold tracking-tight">
+                  {c}
+                </span>
+                <span class="text-2xl transition-transform duration-500 group-hover:rotate-45 md:text-4xl">↗</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </main>
+</Base>

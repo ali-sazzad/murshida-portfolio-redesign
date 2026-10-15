@@ -1,0 +1,126 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import Rail from "../components/Rail";
+import { intro, education, achievements, gallery } from "../data/content";
+
+const words = (s: string) => s.split(" ");
+const ring = "WEB DEVELOPER • MURSHIDA P. • WEB DEVELOPER • MURSHIDA P. • ";
+// chronological: past -> present
+const path = [...education].reverse();
+const tilt = ["-rotate-3", "rotate-2"];
+---
+
+<Base>
+  <main>
+    <PageHead index="02" title="About Me" />
+
+    <section class="mt-14 grid gap-14 px-5 md:mt-24 md:grid-cols-12 md:gap-12 md:px-10">
+      <!-- badge -->
+      <div class="md:col-span-5">
+        <div class="md:sticky md:top-28">
+          <div class="relative mx-auto aspect-square w-[min(100%,26rem)]" data-reveal>
+            <svg
+              viewBox="0 0 200 200"
+              class="absolute inset-0 size-full animate-[spin_26s_linear_infinite]"
+              aria-hidden="true"
+            >
+              <defs>
+                <path id="ring" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"></path>
+              </defs>
+              <text class="fill-ink" style="font: 600 10px var(--font-mono);">
+                <textPath href="#ring" textLength="534" lengthAdjust="spacing">{ring}</textPath>
+              </text>
+            </svg>
+            <div class="absolute inset-[11%] overflow-hidden rounded-full bg-accent">
+              <img
+                src={intro.image}
+                alt="Murshida P."
+                class="absolute bottom-0 left-1/2 h-[104%] w-auto max-w-none -translate-x-1/2"
+              />
+            </div>
+          </div>
+          <p class="display mt-10 text-center text-[clamp(2.4rem,6vw,4.6rem)] md:text-left" data-reveal>
+            <span class="serif normal-case text-accent">I am</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- story -->
+      <div class="md:col-span-7">
+        {
+          intro.paragraphs.map((p, i) => (
+            <p
+              data-words
+              class={
+                i === 0
+                  ? "text-[clamp(1.5rem,2.7vw,2.5rem)] leading-[1.2] font-semibold tracking-tight"
+                  : "mt-10 text-[clamp(1.1rem,1.7vw,1.5rem)] leading-snug font-medium tracking-tight"
+              }
+            >
+              {words(p).map((w) => (
+                <>
+                  <span class="w">{w}</span>{" "}
+                </>
+              ))}
+            </p>
+          ))
+        }
+
+        <!-- education path -->
+        <div class="mt-20" data-reveal>
+          <p class="mono mb-8 border-b border-ink/80 pb-3">Education</p>
+          <ol class="relative ml-3 border-l border-ink/70 pl-8">
+            {
+              path.map((e, i) => (
+                <li class="relative pb-10 last:pb-0">
+                  <span
+                    class={`absolute top-1 -left-[2.62rem] grid size-5 place-items-center rounded-full border border-ink ${
+                      i === path.length - 1 ? "bg-accent" : "bg-paper"
+                    }`}
+                  >
+                    {i === path.length - 1 && (
+                      <span class="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+                    )}
+                  </span>
+                  <p class="mono opacity-60">{e.when}</p>
+                  <p class="mt-1 text-2xl leading-tight font-bold tracking-tight">{e.title}</p>
+                  <p class="mt-1 opacity-70">{e.place}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <!-- achievements as stamps -->
+        <div class="mt-20" data-reveal>
+          <p class="mono mb-8 border-b border-ink/80 pb-3">Achievements</p>
+          <ul class="grid gap-6 sm:grid-cols-2">
+            {
+              achievements.map((a, i) => (
+                <li
+                  class={`group relative rounded-2xl border-2 border-dashed border-ink p-6 transition-transform duration-700 ease-[var(--ease-expo)] hover:rotate-0 ${tilt[i % 2]} ${
+                    i === 0 ? "bg-accent" : "bg-paper-2"
+                  }`}
+                >
+                  <span class="mono">★ 0{i + 1}</span>
+                  <p class="mt-8 text-[1.35rem] leading-tight font-extrabold tracking-tight">{a}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-28 md:mt-40">
+      <div class="mono mb-6 flex items-center justify-between px-5 md:px-10" data-reveal>
+        <span>Moments · {String(gallery.length).padStart(2, "0")}</span>
+        <span class="opacity-60">Drag →</span>
+      </div>
+      <div data-reveal>
+        <Rail client:visible items={gallery} />
+      </div>
+    </section>
+  </main>
+</Base>

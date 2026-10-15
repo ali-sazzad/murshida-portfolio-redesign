@@ -1,0 +1,150 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import Chrome from "../components/Chrome";
+import Cursor from "../components/Cursor";
+import { intro, nav } from "../data/content";
+
+interface Props {
+  footer?: boolean;
+}
+const { footer = true } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#eeeae1" />
+    <meta name="google-site-verification" content="iH6j45G215ohCo4cySAT6pSREZ_qcIL8vvN9q13Tjp0" />
+    <meta
+      name="description"
+      content="Murshida P. portfolio built with Astro, React, Tailwind CSS, shadcn/ui and Supabase."
+    />
+    <title>Murshida P. | Web Developer</title>
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=Exo+2:wght@600;700&family=Playfair+Display:ital,wght@1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <ClientRouter />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <Cursor client:load transition:persist="cursor" />
+    <Chrome
+      client:load
+      transition:persist="chrome"
+      links={nav}
+      resume={intro.resume}
+      email={intro.email}
+      phone={intro.phone}
+      linkedin={intro.linkedin}
+      github={intro.github}
+      initialPath={path}
+    />
+
+    <slot />
+
+    {
+      footer && (
+        <footer class="px-5 pt-24 pb-16 md:px-10">
+          <div class="flex flex-col gap-6 border-t border-ink/80 pt-6 md:flex-row md:items-end md:justify-between">
+            <p class="display text-[clamp(2.6rem,8vw,6rem)]">
+              Murshida <span class="serif normal-case text-accent">P.</span>
+            </p>
+            <div class="mono flex flex-wrap gap-x-8 gap-y-2">
+              <a href={`mailto:${intro.email}`} class="hover:text-accent">{intro.email}</a>
+              <a href={intro.linkedin} target="_blank" rel="noreferrer" class="hover:text-accent">LinkedIn</a>
+              <a href={intro.resume} target="_blank" rel="noreferrer" class="hover:text-accent">Get Resume</a>
+            </div>
+          </div>
+        </footer>
+      )
+    }
+
+    <script>
+      import Lenis from "lenis";
+
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const w = window as any;
+
+      if (!w.__lenis && !reduce) {
+        const lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true });
+        w.__lenis = lenis;
+        const raf = (t: number) => {
+          lenis.raf(t);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+      }
+
+      const clamp = (n: number, a = 0, b = 1) => Math.min(b, Math.max(a, n));
+      let io: IntersectionObserver | null = null;
+      let ticking = false;
+
+      function frame() {
+        ticking = false;
+        const vh = innerHeight;
+
+        // word-by-word fill
+        document.querySelectorAll<HTMLElement>("[data-words]").forEach((p) => {
+          const r = p.getBoundingClientRect();
+          const prog = clamp((vh * 0.88 - r.top) / (r.height + vh * 0.3));
+          const ws = p.querySelectorAll<HTMLElement>(".w");
+          const lit = Math.round(prog * ws.length * 1.08);
+          ws.forEach((el, i) => el.classList.toggle("on", i < lit));
+        });
+
+        // stacking cards
+        const stacks = document.querySelectorAll<HTMLElement>("[data-stack]");
+        stacks.forEach((wrap) => {
+          const cards = Array.from(wrap.children) as HTMLElement[];
+          cards.forEach((c, i) => {
+            const next = cards[i + 1];
+            if (!next) return;
+            const top = parseFloat(getComputedStyle(c).top) || 0;
+            const d = next.getBoundingClientRect().top - top;
+            const p = clamp(1 - d / Math.max(c.offsetHeight, 1));
+            c.style.transform = `scale(${1 - p * 0.055})`;
+            c.style.filter = `brightness(${1 - p * 0.18})`;
+          });
+        });
+      }
+      const request = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(frame);
+        }
+      };
+
+      function setup() {
+        io?.disconnect();
+        io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("in");
+                io!.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+        );
+        document.querySelectorAll("[data-reveal]").forEach((el) => io!.observe(el));
+        w.__lenis?.scrollTo(0, { immediate: true, force: true });
+        request();
+      }
+
+      document.addEventListener("astro:page-load", setup);
+      addEventListener("scroll", request, { passive: true });
+      addEventListener("resize", request);
+      w.__lenis?.on("scroll", request);
+    </script>
+  </body>
+</html>

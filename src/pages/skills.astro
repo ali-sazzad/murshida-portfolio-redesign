@@ -1,0 +1,16 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import SkillsTable from "../components/SkillsTable";
+import { skills } from "../data/content";
+---
+
+<Base>
+  <main>
+    <PageHead index="03" title="Skills" note={`${skills.length} tools`} />
+
+    <section class="mt-14 px-5 md:mt-20 md:px-10">
+      <SkillsTable client:load skills={skills} />
+    </section>
+  </main>
+</Base>

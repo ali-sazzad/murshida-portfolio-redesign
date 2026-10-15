@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroLens from "../components/HeroLens";
+import { ButtonLink } from "../components/ui/button";
+import { intro } from "../data/content";
+---
+
+<Base footer={false}>
+  <main class="relative">
+    <HeroLens
+      client:load
+      image={intro.image}
+      first="MURSHIDA"
+      last="P."
+      role={["WEB", "DEVELOPER"]}
+      skills={intro.skills}
+    />
+    <div
+      class="absolute right-5 z-10 flex gap-2 xl:hidden"
+      style="bottom: calc(min(9.4vw, 15svh) * 1.5 + 1.25rem)"
+    >
+      <ButtonLink href={intro.resume} target="_blank" rel="noreferrer" variant="outline" size="sm">
+        Get Resume
+      </ButtonLink>
+      <button data-connect class="inline-flex h-9 items-center rounded-full bg-accent px-4 text-[0.8rem] font-semibold">
+        Connect
+      </button>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("click", (e) => {
+      if ((e.target as Element).closest("[data-connect]")) dispatchEvent(new Event("open-connect"));
+    });
+  </script>
+</Base>

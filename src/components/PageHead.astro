@@ -1,0 +1,19 @@
+---
+interface Props {
+  index: string;
+  title: string;
+  note?: string;
+}
+const { index, title, note } = Astro.props;
+---
+
+<header class="px-5 pt-32 md:px-10 md:pt-44">
+  <div class="mono mb-6 flex items-center gap-4" data-reveal>
+    <span>{index}</span>
+    <span class="h-px w-16 bg-ink/60"></span>
+    {note && <span class="opacity-60">{note}</span>}
+  </div>
+  <h1 class="display mask text-[clamp(2.2rem,9.6vw,11rem)]" data-reveal style="--d:.05s">
+    <span>{title}</span>
+  </h1>
+</header>
