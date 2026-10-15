@@ -4,16 +4,24 @@ A redesign of the personal portfolio of **Murshida P.**, Web Developer (BSc Comp
 
 **Live:** https://murshida-portfolio-redesign.vercel.app · **GitHub Pages:** https://ali-sazzad.github.io/murshida-portfolio-redesign/
 
+## Before & after
+
+A 1-minute walkthrough of the original site next to the redesign: **[docs/before-after.mp4](docs/before-after.mp4)** (download or open on GitHub to play).
+
+<video src="docs/before-after.mp4" controls muted width="100%"></video>
+
 ## Highlights
 
-- **Cursor lens hero** – a circular lens follows the pointer (or drifts on touch devices) and reveals an inverted colour version of the scene.
+- **Black & white identity** – a pure monochrome palette (white paper, black ink, one neutral grey) with greyscale imagery, matching the original client look. Colour is reserved for the skill atoms and certificate ribbons.
+- **Cursor lens hero** – a circular lens follows the pointer (or drifts on touch devices) and reveals an inverted version of the scene.
 - **Floating dock navigation** with a sliding active indicator, a full-screen mobile menu and a *Connect* sheet.
 - **Ink-wipe page transitions** powered by Astro view transitions; the dock and cursor persist between pages.
 - **Smooth scrolling** with Lenis, scroll-reveal masks and word-by-word text fill.
-- **Skills as a periodic table** of tools with a live specimen readout.
-- **About** with a rotating-text portrait badge, education timeline and achievement stamps, plus a drag-and-inertia gallery rail.
-- **Experience** as stacking, scaling cards; **Certificates** as an indexed list with hover wipes.
-- Fully responsive, keyboard accessible, and respects `prefers-reduced-motion`.
+- **Skills as atom clusters** – Languages, Frameworks, Data and Tooling are fused molecules of overlapping atoms with orbiting electrons; hover or tap an atom for a live readout.
+- **About** as an editorial layout: pinned portrait, word-fill lead statement, "at a glance" facts, numbered education and achievements, plus a drag-and-inertia gallery rail.
+- **Experience** as stacking, scaling cards.
+- **Certificates as a folder stack** – each certificate is a tabbed folder with a guilloche-patterned certificate, ribbon and rotating seal that lands on the previous one as you scroll.
+- Visible custom cursor on light backgrounds, fully responsive, keyboard accessible, and respects `prefers-reduced-motion`.
 
 ## Tech stack
 
