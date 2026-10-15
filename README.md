@@ -1,8 +1,8 @@
-# Murshida P. — Portfolio
+# Murshida P. — Portfolio Redesign
 
 A redesign of the personal portfolio of **Murshida P.**, Web Developer (BSc Computer Science, MSc Computer Science — Data Analytics in progress). The site keeps all of the original content and imagery and gives it a new visual language, motion system and navigation model.
 
-**Live:** https://murshida-portfolio-redesign.vercel.app · **GitHub Pages:** https://ali-sazzad.github.io/murshida-portfolio/
+**Live:** https://murshida-portfolio-redesign.vercel.app · **GitHub Pages:** https://ali-sazzad.github.io/murshida-portfolio-redesign/
 
 ## Highlights
 
